@@ -265,14 +265,22 @@ function setRequestTimeout (response) {
 		timeout;
 
 	timeout = setTimeout(function () {
-		console.error('zerver: request timeout');
-		response.end('');
+		try{
+			console.error('zerver: request timeout');
+			response.end('');
+		} catch ( e ) {
+			// NO-OP
+		}
 	}, REQUEST_TIMEOUT);
 
 	response.end = function () {
-		clearTimeout(timeout);
-		response.end = responseEnd;
-		response.end.apply(this, arguments);
+		try {
+			clearTimeout(timeout);
+			response.end = responseEnd;
+			response.end.apply(this, arguments);
+		} catch ( e ) {
+			// NO-OP
+		}
 	};
 }
 

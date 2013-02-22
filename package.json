@@ -1,6 +1,6 @@
 {
   "author": "Jairaj Sethi <j@jairaj.org> (http://jairaj.org/)",
-  "name": "zerver",
+  "name": "zerver-j",
   "description": "client-integrated webapp server",
   "version": "0.7.11",
   "repository": {
