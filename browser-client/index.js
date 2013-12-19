@@ -228,13 +228,7 @@
 		};
 
 
-		setTimeout(function () {
-			if ( !done ) {
-				alert("TIMED OUT!");
-				xhr.abort();
-				xhrComplete(0);
-			}
-		}, timeout);
+		
 
 		xhr.open('POST', url, true);
 
@@ -242,9 +236,15 @@
 
 		xhr.timeout = timeout;
 		xhr.ontimeout = function () {
-			alert("TIMED OUT!");
 			xhrComplete(0);
 		};
+
+		setTimeout(function () {
+			if ( !done ) {
+				xhr.abort();
+				xhrComplete(0);
+			}
+		}, timeout);
 
 		xhr.send(data);
 
