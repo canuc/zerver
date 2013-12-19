@@ -1,26 +1,5 @@
-(function (window) {
-	if (!Array.prototype.forEach)
-	{
-	  Array.prototype.forEach = function(fun /*, thisArg */)
-	  {
-	    "use strict";
-
-	    if (this === void 0 || this === null)
-	      throw new TypeError();
-
-	    var t = Object(this);
-	    var len = t.length >>> 0;
-	    if (typeof fun !== "function")
-	      throw new TypeError();
-
-	    var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
-	    for (var i = 0; i < len; i++)
-	    {
-	      if (i in t)
-	        fun.call(thisArg, t[i], i, t);
-	    }
-	  };
-	}
+(function (window,jQuery) {
+	
 
 	var XHR_TIMEOUT        = 30000,
 		ZERVER_INIT        = 'ZERVER_INIT',
@@ -138,7 +117,7 @@
 			apiCall(tree.concat(key), data, function (error, response) {
 				if (error) {
 					if (errorHandlers.length) {
-						errorHandlers.forEach(function (handler) {
+						jQuery.each(errorHandlers,function (handler) {
 							try {
 								handler.call(obj, error);
 							}
@@ -269,7 +248,7 @@
 			var handlers = apiSocket.slice();
 			apiSocket = socket;
 
-			handlers.forEach(function (handler) {
+			jQuery.each(handlers,function (handler) {
 				handler();
 			});
 		});
@@ -390,7 +369,7 @@
 			raw = raw.substr(0, lastBreak);
 			lastIndex += raw.length + 1;
 
-			raw.split('\n').forEach(function (line) {
+			jQuery.each(raw.split('\n'),function (line) {
 				if (line && (line[0] !== ';')) {
 					onMessage(line);
 				}
@@ -480,7 +459,7 @@
 			raw = raw.substr(0, lastBreak);
 			lastIndex += raw.length + 1;
 
-			raw.split('\n').forEach(function (line) {
+			jQuery.each(raw.split('\n'),function (line) {
 				if (line && (line[0] !== ';')) {
 					onMessage(line);
 				}
@@ -605,7 +584,7 @@
 			queuedLogs = null;
 			onLog      = pipeLog;
 
-			logs.forEach(function (data) {
+			jQuery.each(logs,function (data) {
 				pipeLog(data[0], data[1]);
 			});
 		}
@@ -729,9 +708,9 @@
 			var funcs = notReady.slice();
 			notReady = false;
 
-			funcs.forEach(function (func) {
+			jQuery.each(funcs,function (func) {
 				func();
 			});
 		}, 500);
 	}
-})(window);
+})(window,$);

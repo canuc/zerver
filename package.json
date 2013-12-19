@@ -2,12 +2,12 @@
 {
   "author": "Jairaj Sethi <j@jairaj.org> (http://jairaj.org/)",
   "name": "zerver-j",
-  "description" : "a modern webapp server",
-  "version" : "0.14.6",
+  "description" : "A fork of the zerver module. Modified and tested on ie8, with the requirement of jquery.",
+  "version" : "0.14.7",
   "license" : "MIT" ,
   "repository" : {
     "type" : "git",
-    "url" : "git://github.com/jairajs89/zerver.git"
+    "url" : "git@github.com:canuc/zerver.git"
   },
   "engines" : {
     "node" : ">=0.8"
@@ -15,7 +15,8 @@
   "dependencies" : {
     "mime"      : "1.2.7" ,
     "uglify-js" : "1.3.4" ,
-    "websocket" : "1.0.8"
+    "websocket" : "1.0.8",
+    "zerver"    : "https://github.com/jairajs89/zerver/tarball/master"
   },
   "main" : "node-client/index.js",
   "bin" : {
