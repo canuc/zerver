@@ -1,5 +1,28 @@
 (function (window) {
-	var XHR_TIMEOUT        = 22000,
+	if (!Array.prototype.forEach)
+	{
+	  Array.prototype.forEach = function(fun /*, thisArg */)
+	  {
+	    "use strict";
+
+	    if (this === void 0 || this === null)
+	      throw new TypeError();
+
+	    var t = Object(this);
+	    var len = t.length >>> 0;
+	    if (typeof fun !== "function")
+	      throw new TypeError();
+
+	    var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+	    for (var i = 0; i < len; i++)
+	    {
+	      if (i in t)
+	        fun.call(thisArg, t[i], i, t);
+	    }
+	  };
+	}
+
+	var XHR_TIMEOUT        = 30000,
 		ZERVER_INIT        = 'ZERVER_INIT',
 		ZERVER_KILL_STREAM = 'ZERVER_KILL_STREAM',
 		IS_ANDROID         = /\bAndroid\b/gi.test(navigator.userAgent);
@@ -179,6 +202,15 @@
 		var done = false,
 			xhr;
 
+		function xhrComplete (status) {
+			if (done) {
+				return;
+			}
+			done = true;
+
+			callback && callback(status, xhr.responseText);
+		}
+		
 		if (typeof XMLHttpRequest !== 'undefined') {
 			xhr = new XMLHttpRequest();
 		}
@@ -195,31 +227,30 @@
 			}
 		};
 
-		var timeout = window['ZERVER_TIMEOUT'] || XHR_TIMEOUT;
-
-		xhr.timeout = timeout;
-		xhr.ontimeout = function () {
-			xhrComplete(0);
-		};
 
 		setTimeout(function () {
 			if ( !done ) {
+				alert("TIMED OUT!");
 				xhr.abort();
 				xhrComplete(0);
 			}
 		}, timeout);
 
 		xhr.open('POST', url, true);
+
+		var timeout = window['ZERVER_TIMEOUT'] || XHR_TIMEOUT;
+
+		xhr.timeout = timeout;
+		xhr.ontimeout = function () {
+			alert("TIMED OUT!");
+			xhrComplete(0);
+		};
+
 		xhr.send(data);
 
-		function xhrComplete (status) {
-			if (done) {
-				return;
-			}
-			done = true;
 
-			callback && callback(status, xhr.responseText);
-		}
+		
+
 	}
 
 	function setupSocket (handler) {
@@ -686,7 +717,9 @@
 	}
 
 	function flushReadyQueue () {
-		window.removeEventListener('load', flushReadyQueue);
+		if ( window.removeEventListener ) {
+			window.removeEventListener('load', flushReadyQueue);
+		}
 
 		if ( !notReady ) {
 			return;
